@@ -16,25 +16,31 @@
         "type": "object",
         "title": "Password Policy Description",
         "description": "The Password Policy Description (PPD) represents a single password policy description for the given url.",
-        "required": [
-          "name",
-          "version",
-          "url"
+        "oneOf": [
+          {
+            "required": [
+              "name",
+              "version",
+              "url",
+              "service"
+            ],
+            "not": { 
+              "required": ["redirect"]
+            }
+          },
+          {
+            "required": [
+              "name",
+              "version",
+              "url",
+              "redirect"
+            ],
+            "not": { "required": 
+              ["service"]
+            }
+          }
         ],
         "properties": {
-          "redirect": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "title": "Redirect",
-            "description": "Mutually exclusive with service item. If the PPD is a redirect PPD, this value points to the main URL. Otherwise, it is null or undefined.",
-            "default": null,
-            "examples": [
-              "https://example.com"
-            ],
-            "format": "uri-template"
-          },
           "characterSets": {
             "type": "array",
             "title": "CharacterSets",
@@ -340,6 +346,19 @@
             "examples": [
               1534347937113
             ]
+          },
+          "redirect": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "title": "Redirect",
+            "description": "Mutually exclusive with service item. If the PPD is a redirect PPD, this value points to the main URL. Otherwise, it is null or undefined.",
+            "default": null,
+            "examples": [
+              "https://example.com"
+            ],
+            "format": "uri-template"
           }
         }
       }

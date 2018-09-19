@@ -980,7 +980,8 @@
       "type": "object",
       "required": [
         "type",
-        "expression"
+        "expression",
+        "selector"
       ],
       "properties": {
         "type": {
@@ -1000,6 +1001,10 @@
             "integer",
             "null"
           ]
+        },
+        "selector": {
+          "type": "string",
+          "description": "The CSS-selector of the element of which the innerHTML should be checked for the pattern. So 'body' implies entire page."
         },
         "expression": {
           "description": "The pattern that should be found on the page.",

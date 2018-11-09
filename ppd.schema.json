@@ -21,7 +21,8 @@
               "name",
               "version",
               "url",
-              "service"
+              "service",
+              "properties"
             ],
             "not": {
               "required": ["redirect"]
@@ -84,7 +85,6 @@
             "type": "object",
             "title": "Service",
             "description": "Mutually exclusive with redirect item. Contains instructions to automate website logging in, password change, registration and password reset.",
-            "required": ["properties"],
             "properties": {
               "passwordReset": {
                 "type": "object",

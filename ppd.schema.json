@@ -16,8 +16,7 @@
         "type": "object",
         "title": "Password Policy Description",
         "description": "The Password Policy Description (PPD) represents a single password policy description for the given url.",
-        "oneOf": [
-          {
+        "oneOf": [{
             "required": [
               "name",
               "version",
@@ -36,7 +35,7 @@
               "redirect"
             ],
             "not": {
-              "required": [ "service" ]
+              "required": ["service"]
             }
           }
         ],
@@ -85,7 +84,7 @@
             "type": "object",
             "title": "Service",
             "description": "Mutually exclusive with redirect item. Contains instructions to automate website logging in, password change, registration and password reset.",
-            "required": [ "properties" ],
+            "required": ["properties"],
             "properties": {
               "passwordReset": {
                 "type": "object",
@@ -139,8 +138,7 @@
                       "type": "object",
                       "title": "Routine",
                       "description": "A routine is a set of instructions that automate the change password process.",
-                      "oneOf": [
-                        {
+                      "oneOf": [{
                           "$ref": "#/definitions/HTTPPasswordChangeRoutine"
                         },
                         {
@@ -185,8 +183,7 @@
                       "type": "object",
                       "title": "Routine",
                       "description": "A routine is a set of instructions that automate the login process.",
-                      "oneOf": [
-                        {
+                      "oneOf": [{
                           "$ref": "#/definitions/HTTPLoginRoutine"
                         },
                         {
@@ -422,725 +419,714 @@
           }
         }
       }
+    }
+  },
+  "definitions": {
+    "maxTries": {
+      "type": "number",
+      "title": "MaxTries",
+      "description": "The amount of incorrect attempts before an accounts get locked. 0 means unlimited.",
+      "default": 0,
+      "minimum": 0
     },
-    "definitions": {
-      "maxTries": {
-        "type": "number",
-        "title": "MaxTries",
-        "description": "The amount of incorrect attempts before an accounts get locked. 0 means unlimited.",
-        "default": 0,
-        "minimum": 0
-      },
-      "HTTPLoginRoutine": {
-        "title": "HTTPLoginRoutine",
-        "description": "A login routine that can be executed by sending a HTTP-request.",
-        "type": "object",
-        "required": [
-          "type",
-          "instructions"
-        ],
-        "properties": {
-          "type": {
-            "type": "string",
-            "title": "Routine login type",
-            "description": "The of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
-            "const": "HTTPLoginRoutine"
-          },
-          "instructions": {
-            "type": "array",
-            "title": "Instructions",
-            "description": "The set of instructions.",
-            "items": {
-              "type": "object",
-              "title": "Instruction",
-              "oneOf": [
-                {
-                  "$ref": "#/definitions/getInstruction"
-                },
-                {
-                  "$ref": "#/definitions/formInstruction"
-                },
-                {
-                  "$ref": "#/definitions/skipInstruction"
-                }
-              ]
-            }
-          }
-        }
-      },
-      "htmlLoginRoutine": {
-        "title": "HTMLLoginRoutine",
-        "description": "A login routine that does not rely on javascript.",
-        "type": "object",
-        "required": [
-          "type",
-          "instructions"
-        ],
-        "properties": {
-          "type": {
-            "type": "string",
-            "title": "Routine login type",
-            "description": "The of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
-            "const": "htmlLoginRoutine"
-          },
-          "instructions": {
-            "type": "array",
-            "title": "Instructions",
-            "description": "The set of instructions.",
-            "items": {
-              "type": "object",
-              "title": "Instruction",
-              "description": "An operation on the webpage that is part of the routine process. For example, load a page or fill and submit a form.",
-              "oneOf": [
-                {
-                  "$ref": "#/definitions/getInstruction"
-                },
-                {
-                  "$ref": "#/definitions/formInstruction"
-                },
-                {
-                  "$ref": "#/definitions/skipInstruction"
-                }
-              ]
-            }
-          }
-        }
-      },
-      "javascriptLoginRoutine": {
-        "title": "JavascriptLoginRoutine",
-        "description": "A login routine that relies on javascript being enabled.",
-        "type": "object",
-        "required": [
-          "type",
-          "instructions"
-        ],
-        "properties": {
-          "type": {
-            "type": "string",
-            "title": "Routine login type",
-            "description": "The of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
-            "const": "javascriptLoginRoutine"
-          },
-          "instructions": {
-            "type": "array",
-            "title": "Instructions",
-            "description": "The set of instructions.",
-            "items": {
-              "type": "object",
-              "title": "Instruction",
-              "description": "An operation on the webpage that is part of the routine process. For example, load a page or fill and submit a form.",
-              "oneOf": [
-                {
-                  "$ref": "#/definitions/getInstruction"
-                },
-                {
-                  "$ref": "#/definitions/formInstruction"
-                },
-                {
-                  "$ref": "#/definitions/skipInstruction"
-                }
-              ]
-            }
-          }
-        }
-      },
-      "extendedJSLoginRoutine": {
-        "title": "ExtendedJSLoginRoutine",
-        "description": "A login routine that relies on javascript-instructions.",
-        "type": "object",
-        "required": [
-          "type",
-          "instructions"
-        ],
-        "properties": {
-          "type": {
-            "type": "string",
-            "title": "Routine login type",
-            "description": "The of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
-            "const": "extendedJSLoginRoutine"
-          },
-          "instructions": {
-            "type": "array",
-            "title": "Instructions",
-            "description": "The set of instructions.",
-            "items": {
-              "type": "object",
-              "title": "Instruction",
-              "description": "An operation on the webpage that is part of the routine process. For example, load a page or execute some JavaScript.",
-              "oneOf": [
-                {
-                  "$ref": "#/definitions/getInstruction"
-                },
-                {
-                  "$ref": "#/definitions/formInstruction"
-                },
-                {
-                  "$ref": "#/definitions/javascriptInstruction"
-                },
-                {
-                  "$ref": "#/definitions/skipInstruction"
-                }
-              ]
-            }
-          }
-        }
-      },
-      "HTTPPasswordChangeRoutine": {
-        "title": "HTTPPasswordChangeRoutine",
-        "description": "A password change routine that can be executed by sending a HTTP request.",
-        "type": "object",
-        "required": [
-          "type",
-          "instructions"
-        ],
-        "properties": {
-          "type": {
-            "type": "string",
-            "title": "Routine login type",
-            "description": "The of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
-            "const": "HTTPPasswordChangeRoutine"
-          },
-          "instructions": {
-            "type": "array",
-            "title": "Instructions",
-            "description": "The set of instructions.",
-            "items": {
-              "type": "object",
-              "title": "Instruction",
-              "description": "An operation on the webpage that is part of the routine process. For example, load a page or fill and submit a form.",
-              "oneOf": [
-                {
-                  "$ref": "#/definitions/getInstruction"
-                },
-                {
-                  "$ref": "#/definitions/formInstruction"
-                },
-                {
-                  "$ref": "#/definitions/skipInstruction"
-                }
-              ]
-            }
-          }
-        }
-      },
-      "htmlPasswordChangeRoutine": {
-        "title": "HTMLPasswordChangeRoutine",
-        "description": "A password change routine for page that does not need javascript.",
-        "type": "object",
-        "required": [
-          "type",
-          "instructions"
-        ],
-        "properties": {
-          "type": {
-            "type": "string",
-            "title": "Routine login type",
-            "description": "The of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
-            "const": "htmlPasswordChangeRoutine"
-          },
-          "instructions": {
-            "type": "array",
-            "title": "Instructions",
-            "description": "The set of instructions.",
-            "items": {
-              "type": "object",
-              "title": "Instruction",
-              "description": "An operation on the webpage that is part of the routine process. For example, load a page or fill and submit a form.",
-              "oneOf": [
-                {
-                  "$ref": "#/definitions/getInstruction"
-                },
-                {
-                  "$ref": "#/definitions/formInstruction"
-                },
-                {
-                  "$ref": "#/definitions/skipInstruction"
-                }
-              ]
-            }
-          }
-        }
-      },
-      "javascriptPasswordChangeRoutine": {
-        "title": "JavascriptPasswordChangeRoutine",
-        "description": "A password change routine for page that needs javascript.",
-        "required": [
-          "type",
-          "instructions"
-        ],
-        "properties": {
-          "type": {
-            "type": "string",
-            "title": "Routine login type",
-            "description": "The of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
-            "const": "javascriptPasswordChangeRoutine"
-          },
-          "instructions": {
-            "type": "array",
-            "title": "Instructions",
-            "description": "The set of instructions.",
-            "items": {
-              "type": "object",
-              "title": "Instruction",
-              "oneOf": [
-                {
-                  "$ref": "#/definitions/getInstruction"
-                },
-                {
-                  "$ref": "#/definitions/formInstruction"
-                },
-                {
-                  "$ref": "#/definitions/javascriptInstruction"
-                },
-                {
-                  "$ref": "#/definitions/skipInstruction"
-                }
-              ]
-            }
-          }
-        }
-      },
-      "extendedJSPasswordChangeRoutine": {
-        "title": "ExtendedJSPasswordChangeRoutine",
-        "description": "A password change routine that relies on javascript-instructions.",
-        "type": "object",
-        "required": [
-          "type",
-          "instructions"
-        ],
-        "properties": {
-          "type": {
-            "type": "string",
-            "title": "Routine password change type",
-            "description": "The of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
-            "const": "extendedJSPasswordChangeRoutine"
-          },
-          "instructions": {
-            "type": "array",
-            "title": "Instructions",
-            "description": "The set of instructions.",
-            "items": {
-              "type": "object",
-              "title": "Instruction",
-              "oneOf": [
-                {
-                  "$ref": "#/definitions/getInstruction"
-                },
-                {
-                  "$ref": "#/definitions/formInstruction"
-                },
-                {
-                  "$ref": "#/definitions/javascriptInstruction"
-                },
-                {
-                  "$ref": "#/definitions/skipInstruction"
-                }
-              ]
-            }
-          }
-        }
-      },
-      "baseInstruction": {
-        "type": "object",
-        "title": "BaseInstruction",
-        "description": "Base instruction superclass.",
-        "properties": {
-          "assert": {
-            "type": "array",
-            "title": "A set of asserts, where at least 1 should be true. Evaluated as logical OR.",
-            "items": {
-              "type": "object",
-              "title": "Assert",
-              "oneOf": [
-                {
-                  "$ref": "#/definitions/urlAssert"
-                },
-                {
-                  "$ref": "#/definitions/selectAssert"
-                },
-                {
-                  "$ref": "#/definitions/cookieAssert"
-                },
-                {
-                  "$ref": "#/definitions/noCookieAssert"
-                },
-                {
-                  "$ref": "#/definitions/findAssert"
-                },
-                {
-                  "$ref": "#/definitions/childMutationAssert"
-                },
-                {
-                  "$ref": "#/definitions/attributeMutationAssert"
-                }
-              ]
-            }
-          },
-          "frameUrl": {
-            "type": "string",
-            "description": "If the instruction should be executed within an iframe on the page, this value should contain the URL of that iframe.",
-            "format": "uri-template"
-          }
-        }
-      },
-      "getInstruction": {
-        "required": [
-          "type",
-          "url"
-        ],
-        "title": "GetInstruction",
-        "description": "A Get-instruction navigates to a certain URL. It is completed when the page is fully loaded.",
-        "type": "object",
-        "allOf": [{
-            "$ref": "#/definitions/baseInstruction"
-          },
-          {
-            "properties": {
-              "type": {
-                "type": "string",
-                "const": "get"
+    "HTTPLoginRoutine": {
+      "title": "HTTPLoginRoutine",
+      "description": "A login routine that can be executed by sending a HTTP-request.",
+      "type": "object",
+      "required": [
+        "type",
+        "instructions"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Routine login type",
+          "description": "The of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
+          "const": "HTTPLoginRoutine"
+        },
+        "instructions": {
+          "type": "array",
+          "title": "Instructions",
+          "description": "The set of instructions.",
+          "items": {
+            "type": "object",
+            "title": "Instruction",
+            "oneOf": [{
+                "$ref": "#/definitions/getInstruction"
               },
-              "url": {
-                "type": "string",
-                "title": "URL",
-                "description": "The url where should be navigated to.",
-                "format": "uri-template"
+              {
+                "$ref": "#/definitions/formInstruction"
+              },
+              {
+                "$ref": "#/definitions/skipInstruction"
               }
+            ]
+          }
+        }
+      }
+    },
+    "htmlLoginRoutine": {
+      "title": "HTMLLoginRoutine",
+      "description": "A login routine that does not rely on javascript.",
+      "type": "object",
+      "required": [
+        "type",
+        "instructions"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Routine login type",
+          "description": "The of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
+          "const": "htmlLoginRoutine"
+        },
+        "instructions": {
+          "type": "array",
+          "title": "Instructions",
+          "description": "The set of instructions.",
+          "items": {
+            "type": "object",
+            "title": "Instruction",
+            "description": "An operation on the webpage that is part of the routine process. For example, load a page or fill and submit a form.",
+            "oneOf": [{
+                "$ref": "#/definitions/getInstruction"
+              },
+              {
+                "$ref": "#/definitions/formInstruction"
+              },
+              {
+                "$ref": "#/definitions/skipInstruction"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "javascriptLoginRoutine": {
+      "title": "JavascriptLoginRoutine",
+      "description": "A login routine that relies on javascript being enabled.",
+      "type": "object",
+      "required": [
+        "type",
+        "instructions"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Routine login type",
+          "description": "The of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
+          "const": "javascriptLoginRoutine"
+        },
+        "instructions": {
+          "type": "array",
+          "title": "Instructions",
+          "description": "The set of instructions.",
+          "items": {
+            "type": "object",
+            "title": "Instruction",
+            "description": "An operation on the webpage that is part of the routine process. For example, load a page or fill and submit a form.",
+            "oneOf": [{
+                "$ref": "#/definitions/getInstruction"
+              },
+              {
+                "$ref": "#/definitions/formInstruction"
+              },
+              {
+                "$ref": "#/definitions/skipInstruction"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "extendedJSLoginRoutine": {
+      "title": "ExtendedJSLoginRoutine",
+      "description": "A login routine that relies on javascript-instructions.",
+      "type": "object",
+      "required": [
+        "type",
+        "instructions"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Routine login type",
+          "description": "The of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
+          "const": "extendedJSLoginRoutine"
+        },
+        "instructions": {
+          "type": "array",
+          "title": "Instructions",
+          "description": "The set of instructions.",
+          "items": {
+            "type": "object",
+            "title": "Instruction",
+            "description": "An operation on the webpage that is part of the routine process. For example, load a page or execute some JavaScript.",
+            "oneOf": [{
+                "$ref": "#/definitions/getInstruction"
+              },
+              {
+                "$ref": "#/definitions/formInstruction"
+              },
+              {
+                "$ref": "#/definitions/javascriptInstruction"
+              },
+              {
+                "$ref": "#/definitions/skipInstruction"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "HTTPPasswordChangeRoutine": {
+      "title": "HTTPPasswordChangeRoutine",
+      "description": "A password change routine that can be executed by sending a HTTP request.",
+      "type": "object",
+      "required": [
+        "type",
+        "instructions"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Routine login type",
+          "description": "The of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
+          "const": "HTTPPasswordChangeRoutine"
+        },
+        "instructions": {
+          "type": "array",
+          "title": "Instructions",
+          "description": "The set of instructions.",
+          "items": {
+            "type": "object",
+            "title": "Instruction",
+            "description": "An operation on the webpage that is part of the routine process. For example, load a page or fill and submit a form.",
+            "oneOf": [{
+                "$ref": "#/definitions/getInstruction"
+              },
+              {
+                "$ref": "#/definitions/formInstruction"
+              },
+              {
+                "$ref": "#/definitions/skipInstruction"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "htmlPasswordChangeRoutine": {
+      "title": "HTMLPasswordChangeRoutine",
+      "description": "A password change routine for page that does not need javascript.",
+      "type": "object",
+      "required": [
+        "type",
+        "instructions"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Routine login type",
+          "description": "The of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
+          "const": "htmlPasswordChangeRoutine"
+        },
+        "instructions": {
+          "type": "array",
+          "title": "Instructions",
+          "description": "The set of instructions.",
+          "items": {
+            "type": "object",
+            "title": "Instruction",
+            "description": "An operation on the webpage that is part of the routine process. For example, load a page or fill and submit a form.",
+            "oneOf": [{
+                "$ref": "#/definitions/getInstruction"
+              },
+              {
+                "$ref": "#/definitions/formInstruction"
+              },
+              {
+                "$ref": "#/definitions/skipInstruction"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "javascriptPasswordChangeRoutine": {
+      "title": "JavascriptPasswordChangeRoutine",
+      "description": "A password change routine for page that needs javascript.",
+      "required": [
+        "type",
+        "instructions"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Routine login type",
+          "description": "The of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
+          "const": "javascriptPasswordChangeRoutine"
+        },
+        "instructions": {
+          "type": "array",
+          "title": "Instructions",
+          "description": "The set of instructions.",
+          "items": {
+            "type": "object",
+            "title": "Instruction",
+            "oneOf": [{
+                "$ref": "#/definitions/getInstruction"
+              },
+              {
+                "$ref": "#/definitions/formInstruction"
+              },
+              {
+                "$ref": "#/definitions/javascriptInstruction"
+              },
+              {
+                "$ref": "#/definitions/skipInstruction"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "extendedJSPasswordChangeRoutine": {
+      "title": "ExtendedJSPasswordChangeRoutine",
+      "description": "A password change routine that relies on javascript-instructions.",
+      "type": "object",
+      "required": [
+        "type",
+        "instructions"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Routine password change type",
+          "description": "The of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
+          "const": "extendedJSPasswordChangeRoutine"
+        },
+        "instructions": {
+          "type": "array",
+          "title": "Instructions",
+          "description": "The set of instructions.",
+          "items": {
+            "type": "object",
+            "title": "Instruction",
+            "oneOf": [{
+                "$ref": "#/definitions/getInstruction"
+              },
+              {
+                "$ref": "#/definitions/formInstruction"
+              },
+              {
+                "$ref": "#/definitions/javascriptInstruction"
+              },
+              {
+                "$ref": "#/definitions/skipInstruction"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "baseInstruction": {
+      "type": "object",
+      "title": "BaseInstruction",
+      "description": "Base instruction superclass.",
+      "properties": {
+        "assert": {
+          "type": "array",
+          "title": "A set of asserts, where at least 1 should be true. Evaluated as logical OR.",
+          "items": {
+            "type": "object",
+            "title": "Assert",
+            "oneOf": [{
+                "$ref": "#/definitions/urlAssert"
+              },
+              {
+                "$ref": "#/definitions/selectAssert"
+              },
+              {
+                "$ref": "#/definitions/cookieAssert"
+              },
+              {
+                "$ref": "#/definitions/noCookieAssert"
+              },
+              {
+                "$ref": "#/definitions/findAssert"
+              },
+              {
+                "$ref": "#/definitions/childMutationAssert"
+              },
+              {
+                "$ref": "#/definitions/attributeMutationAssert"
+              }
+            ]
+          }
+        },
+        "frameUrl": {
+          "type": "string",
+          "description": "If the instruction should be executed within an iframe on the page, this value should contain the URL of that iframe.",
+          "format": "uri-template"
+        }
+      }
+    },
+    "getInstruction": {
+      "required": [
+        "type",
+        "url"
+      ],
+      "title": "GetInstruction",
+      "description": "A Get-instruction navigates to a certain URL. It is completed when the page is fully loaded.",
+      "type": "object",
+      "allOf": [{
+          "$ref": "#/definitions/baseInstruction"
+        },
+        {
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "get"
+            },
+            "url": {
+              "type": "string",
+              "title": "URL",
+              "description": "The url where should be navigated to.",
+              "format": "uri-template"
             }
           }
-        ]
-      },
-      "formInstruction": {
-        "required": [
-          "type",
-          "element"
-        ],
-        "title": "FormInstruction",
-        "description": "A Form-instructions fills in and submits the form. How the form is submitted depends on the type of routine.",
-        "type": "object",
-        "allOf": [{
-            "$ref": "#/definitions/baseInstruction"
-          },
-          {
-            "properties": {
-              "type": {
-                "type": "string",
-                "const": "form"
-              },
-              "selector": {
-                "description": "A CSS selector of the form that should be filled. If this instruction is part of a htmlRoutine, this form will be submitted.",
-                "type": "object",
+        }
+      ]
+    },
+    "formInstruction": {
+      "required": [
+        "type",
+        "element"
+      ],
+      "title": "FormInstruction",
+      "description": "A Form-instructions fills in and submits the form. How the form is submitted depends on the type of routine.",
+      "type": "object",
+      "allOf": [{
+          "$ref": "#/definitions/baseInstruction"
+        },
+        {
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "form"
+            },
+            "selector": {
+              "description": "A CSS selector of the form that should be filled. If this instruction is part of a htmlRoutine, this form will be submitted.",
+              "type": "object",
+              "required": [
+                "value"
+              ],
+              "properties": {
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "element": {
+              "type": "array",
+              "items": {
                 "required": [
                   "value"
                 ],
                 "properties": {
                   "value": {
-                    "type": "string"
-                  }
-                }
-              },
-              "element": {
-                "type": "array",
-                "items": {
-                  "required": [
-                    "value"
-                  ],
-                  "properties": {
-                    "value": {
-                      "description": "This value should be replaced by the actual value by the application",
-                      "type": "string",
-                      "enum": [
-                        "{{username}}",
-                        "{{password}}",
-                        "{{newPassword}}",
-                        "{{2fa}}",
-                        "{{pin}}"
-                      ]
-                    },
-                    "selector": {
-                      "description": "A CSS selector of the input field that should be filled.",
-                      "type": "object",
-                      "required": [
-                        "value"
-                      ],
-                      "properties": {
-                        "value": {
-                          "type": "string"
-                        }
+                    "description": "This value should be replaced by the actual value by the application",
+                    "type": "string",
+                    "enum": [
+                      "{{username}}",
+                      "{{password}}",
+                      "{{newPassword}}",
+                      "{{2fa}}",
+                      "{{pin}}"
+                    ]
+                  },
+                  "selector": {
+                    "description": "A CSS selector of the input field that should be filled.",
+                    "type": "object",
+                    "required": [
+                      "value"
+                    ],
+                    "properties": {
+                      "value": {
+                        "type": "string"
                       }
                     }
                   }
                 }
-              },
-              "script": {
-                "type": "string",
-                "title": "Script",
-                "description": "JavaScript code that should be executed to submit the form. Will only be executed if this instruction is part of an extendedJSRoutine."
               }
-            }
-          }
-        ]
-      },
-      "javascriptInstruction": {
-        "title": "JavascriptInstruction",
-        "description": "A Javascript-instructions executes a string of JavaScript.",
-        "type": "object",
-        "required": [
-          "type",
-          "script"
-        ],
-        "allOf": [
-          {
-            "$ref": "#/definitions/baseInstruction"
-          },
-          {
-            "properties": {
-              "type": {
-                "type": "string",
-                "const": "javascript"
-              },
-              "script": {
-                "type": "string",
-                "title": "Script",
-                "description": "JavaScript code that should be executed"
-              }
-            }
-          }
-        ]
-      },
-      "skipInstruction": {
-        "title": "JavascriptInstruction",
-        "description": "A Javascript-instructions executes a string of JavaScript.",
-        "type": "object",
-        "required": [
-          "type"
-        ],
-        "allOf": [
-          {
-            "$ref": "#/definitions/baseInstruction"
-          },
-          {
-            "properties": {
-              "type": {
-                "type": "string",
-                "const": "skip"
-              }
-            }
-          }
-        ]
-      },
-      "urlAssert": {
-        "title": "URLAssert",
-        "description": "Assert is true when currently on the URL specified in 'prefix'",
-        "type": "object",
-        "required": [
-          "prefix",
-          "type"
-        ],
-        "properties": {
-          "type": {
-            "type": "string",
-            "const": "url"
-          },
-          "prefix": {
-            "type": "string"
-          },
-          "expression": {
-            "type": "string"
-          }
-        }
-      },
-      "selectAssert": {
-        "title": "SelectAssert",
-        "description": "Assert is true when an element with the specified CSS-selector is found.",
-        "type": "object",
-        "required": [
-          "type",
-          "selector"
-        ],
-        "properties": {
-          "type": {
-            "type": "string",
-            "const": "select"
-          },
-          "selector": {
-            "type": "string"
-          },
-          "minOccurs": {
-            "description": "The minimum number of times the selector should be found on the page.",
-            "type": "integer",
-            "minimum": 0
-          },
-          "maxOccurs": {
-            "description": "The maximum number of times the selector should be found on the page. 0 means it should be absent.",
-            "type": "integer",
-            "minimum": 0
-          },
-          "frameUrl": {
-            "type": "string",
-            "description": "The assert inherits the frameUrl of its instruction, but if the assert should be executed in a different iframe on the page, this value should contain the URL of that iframe.",
-            "format": "uri-template"
-          }
-        }
-      },
-      "cookieAssert": {
-        "type": "object",
-        "title": "CookieAssert",
-        "description": "Assert is true when cookie is found.",
-        "required": [
-          "type",
-          "name"
-        ],
-        "properties": {
-          "type": {
-            "type": "string",
-            "const": "cookie"
-          },
-          "name": {
-            "type": "string"
-          }
-        }
-      },
-      "noCookieAssert": {
-        "title": "NoCookieAssert",
-        "description": "Assert is true when cookie is not found.",
-        "type": "object",
-        "required": [
-          "type",
-          "name"
-        ],
-        "properties": {
-          "type": {
-            "type": "string",
-            "const": "noCookie"
-          },
-          "name": {
-            "type": "string"
-          }
-        }
-      },
-      "findAssert": {
-        "title": "FindAssert",
-        "description": "Check whether a certain pattern (regex) can be found on the page.",
-        "type": "object",
-        "required": [
-          "type",
-          "expression",
-          "selector"
-        ],
-        "properties": {
-          "type": {
-            "type": "string",
-            "const": "find"
-          },
-          "minOccurs": {
-            "description": "The minimum number of times the selector should be found on the page.",
-            "type": "integer",
-            "minimum": 0
-          },
-          "maxOccurs": {
-            "description": "The maximum number of times the selector should be found on the page. 0 means it should be absent.",
-            "type": "integer",
-            "minimum": 0
-          },
-          "selector": {
-            "type": "string",
-            "description": "The CSS-selector of the element of which the innerHTML should be checked for the pattern. So 'body' implies entire page."
-          },
-          "expression": {
-            "description": "The pattern that should be found on the page.",
-            "type": "string"
-          },
-          "frameUrl": {
-            "type": "string",
-            "description": "The assert inherits the frameUrl of its instruction, but if the assert should be executed in a different iframe on the page, this value should contain the URL of that iframe.",
-            "format": "uri-template"
-          }
-        }
-      },
-      "childMutationAssert": {
-        "title": "ChildMutationAssert",
-        "description": "A childMutationObserver observes when childNodes are added or removed on the subtree of a node. See MutationObserver documentation.",
-        "type": "object",
-        "required": [
-          "selector",
-          "type"
-        ],
-        "properties": {
-          "type": {
-            "type": "string",
-            "const": "childMutation"
-          },
-          "selector": {
-            "type": "string",
-            "title": "selector"
-          },
-          "removedNodes": {
-            "type": "array",
-            "title": "RemovedNodes",
-            "items": {
+            },
+            "script": {
               "type": "string",
-              "title": "Selector",
-              "description": "The CSS selector the node that should be found in the removedNodes array of the mutation"
+              "title": "Script",
+              "description": "JavaScript code that should be executed to submit the form. Will only be executed if this instruction is part of an extendedJSRoutine."
             }
-          },
-          "addedNodes": {
-            "type": "array",
-            "title": "AddedNodes",
-            "items": {
-              "type": "string",
-              "title": "Selector",
-              "description": "The CSS selector the node that should be found in the addedNodes array of the mutation"
-            }
-          },
-          "frameUrl": {
-            "type": "string",
-            "description": "The assert inherits the frameUrl of its instruction, but if the assert should be executed in a different iframe on the page, this value should contain the URL of that iframe.",
-            "format": "uri-template"
           }
         }
-      },
-      "attributeMutationAssert": {
-        "title": "AttributeMutationAssert",
-        "description": "An attributeMutationObserver observes attribute mutations on a node, for example class changes. See MutationObserver documentation",
-        "type": "object",
-        "required": [
-          "selector",
-          "type"
-        ],
-        "properties": {
-          "type": {
-            "type": "string",
-            "const": "attributeMutation"
-          },
-          "selector": {
-            "type": "string",
-            "title": "selector",
-            "description": "The CSS-selector of the element the MutationObserver should be place upon."
-          },
-          "attributeName": {
-            "type": "string",
-            "title": "AttributeName",
-            "description": "The name of the attribute that should be observed by the MutationObserver",
-            "examples": [
-              "class"
-            ]
-          },
-          "removedAttributes": {
-            "type": "string",
-            "title": "RemovedAttributes",
-            "description": "A string that should not be found in the current attribute value, but in the oldAttributes value of the mutation."
-          },
-          "addedAttributes": {
-            "type": "string",
-            "title": "AddedAttributes",
-            "description": "A string that should be found in the current attribute value and not in the oldAttributes value of the mutation."
-          },
-          "frameUrl": {
-            "type": "string",
-            "description": "The assert inherits the frameUrl of its instruction, but if the assert should be executed in a different iframe on the page, this value should contain the URL of that iframe.",
-            "format": "uri-template"
+      ]
+    },
+    "javascriptInstruction": {
+      "title": "JavascriptInstruction",
+      "description": "A Javascript-instructions executes a string of JavaScript.",
+      "type": "object",
+      "required": [
+        "type",
+        "script"
+      ],
+      "allOf": [{
+          "$ref": "#/definitions/baseInstruction"
+        },
+        {
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "javascript"
+            },
+            "script": {
+              "type": "string",
+              "title": "Script",
+              "description": "JavaScript code that should be executed"
+            }
           }
+        }
+      ]
+    },
+    "skipInstruction": {
+      "title": "JavascriptInstruction",
+      "description": "A Javascript-instructions executes a string of JavaScript.",
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "allOf": [{
+          "$ref": "#/definitions/baseInstruction"
+        },
+        {
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "skip"
+            }
+          }
+        }
+      ]
+    },
+    "urlAssert": {
+      "title": "URLAssert",
+      "description": "Assert is true when currently on the URL specified in 'prefix'",
+      "type": "object",
+      "required": [
+        "prefix",
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "url"
+        },
+        "prefix": {
+          "type": "string"
+        },
+        "expression": {
+          "type": "string"
+        }
+      }
+    },
+    "selectAssert": {
+      "title": "SelectAssert",
+      "description": "Assert is true when an element with the specified CSS-selector is found.",
+      "type": "object",
+      "required": [
+        "type",
+        "selector"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "select"
+        },
+        "selector": {
+          "type": "string"
+        },
+        "minOccurs": {
+          "description": "The minimum number of times the selector should be found on the page.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "maxOccurs": {
+          "description": "The maximum number of times the selector should be found on the page. 0 means it should be absent.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "frameUrl": {
+          "type": "string",
+          "description": "The assert inherits the frameUrl of its instruction, but if the assert should be executed in a different iframe on the page, this value should contain the URL of that iframe.",
+          "format": "uri-template"
+        }
+      }
+    },
+    "cookieAssert": {
+      "type": "object",
+      "title": "CookieAssert",
+      "description": "Assert is true when cookie is found.",
+      "required": [
+        "type",
+        "name"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "cookie"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "noCookieAssert": {
+      "title": "NoCookieAssert",
+      "description": "Assert is true when cookie is not found.",
+      "type": "object",
+      "required": [
+        "type",
+        "name"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "noCookie"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "findAssert": {
+      "title": "FindAssert",
+      "description": "Check whether a certain pattern (regex) can be found on the page.",
+      "type": "object",
+      "required": [
+        "type",
+        "expression",
+        "selector"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "find"
+        },
+        "minOccurs": {
+          "description": "The minimum number of times the selector should be found on the page.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "maxOccurs": {
+          "description": "The maximum number of times the selector should be found on the page. 0 means it should be absent.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "selector": {
+          "type": "string",
+          "description": "The CSS-selector of the element of which the innerHTML should be checked for the pattern. So 'body' implies entire page."
+        },
+        "expression": {
+          "description": "The pattern that should be found on the page.",
+          "type": "string"
+        },
+        "frameUrl": {
+          "type": "string",
+          "description": "The assert inherits the frameUrl of its instruction, but if the assert should be executed in a different iframe on the page, this value should contain the URL of that iframe.",
+          "format": "uri-template"
+        }
+      }
+    },
+    "childMutationAssert": {
+      "title": "ChildMutationAssert",
+      "description": "A childMutationObserver observes when childNodes are added or removed on the subtree of a node. See MutationObserver documentation.",
+      "type": "object",
+      "required": [
+        "selector",
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "childMutation"
+        },
+        "selector": {
+          "type": "string",
+          "title": "selector"
+        },
+        "removedNodes": {
+          "type": "array",
+          "title": "RemovedNodes",
+          "items": {
+            "type": "string",
+            "title": "Selector",
+            "description": "The CSS selector the node that should be found in the removedNodes array of the mutation"
+          }
+        },
+        "addedNodes": {
+          "type": "array",
+          "title": "AddedNodes",
+          "items": {
+            "type": "string",
+            "title": "Selector",
+            "description": "The CSS selector the node that should be found in the addedNodes array of the mutation"
+          }
+        },
+        "frameUrl": {
+          "type": "string",
+          "description": "The assert inherits the frameUrl of its instruction, but if the assert should be executed in a different iframe on the page, this value should contain the URL of that iframe.",
+          "format": "uri-template"
+        }
+      }
+    },
+    "attributeMutationAssert": {
+      "title": "AttributeMutationAssert",
+      "description": "An attributeMutationObserver observes attribute mutations on a node, for example class changes. See MutationObserver documentation",
+      "type": "object",
+      "required": [
+        "selector",
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "attributeMutation"
+        },
+        "selector": {
+          "type": "string",
+          "title": "selector",
+          "description": "The CSS-selector of the element the MutationObserver should be place upon."
+        },
+        "attributeName": {
+          "type": "string",
+          "title": "AttributeName",
+          "description": "The name of the attribute that should be observed by the MutationObserver",
+          "examples": [
+            "class"
+          ]
+        },
+        "removedAttributes": {
+          "type": "string",
+          "title": "RemovedAttributes",
+          "description": "A string that should not be found in the current attribute value, but in the oldAttributes value of the mutation."
+        },
+        "addedAttributes": {
+          "type": "string",
+          "title": "AddedAttributes",
+          "description": "A string that should be found in the current attribute value and not in the oldAttributes value of the mutation."
+        },
+        "frameUrl": {
+          "type": "string",
+          "description": "The assert inherits the frameUrl of its instruction, but if the assert should be executed in a different iframe on the page, this value should contain the URL of that iframe.",
+          "format": "uri-template"
         }
       }
     }

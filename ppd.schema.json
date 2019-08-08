@@ -255,10 +255,7 @@
           "version": {
             "type": "string",
             "title": "Version",
-            "default": "The current version of the PPD.",
-            "const": {
-              "$ref": "#/version"
-            }
+            "default": "The current version of the PPD."
           },
           "properties": {
             "type": "object",

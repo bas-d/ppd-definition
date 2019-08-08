@@ -208,14 +208,40 @@
                   "url"
                 ],
                 "properties": {
+                  "maxTries": {
+                    "$ref": "#/definitions/maxTries"
+                  },
                   "url": {
                     "type": "string",
                     "title": "URL",
-                    "description": "The human-friendly URL for changing the password.",
+                    "description": "The human-friendly URL for registering a new account.",
                     "examples": [
                       "https://signup.example.com"
                     ],
                     "format": "uri-template"
+                  },
+                  "routines": {
+                    "type": "array",
+                    "title": "Routines",
+                    "description": "The set of routines.",
+                    "items": {
+                      "type": "object",
+                      "title": "Routine",
+                      "description": "A routine is a set of instructions that automate the registration process.",
+                      "oneOf": [{
+                          "$ref": "#/definitions/HTTPRegisterRoutine"
+                        },
+                        {
+                          "$ref": "#/definitions/javascriptRegisterRoutine"
+                        },
+                        {
+                          "$ref": "#/definitions/htmlRegisterRoutine"
+                        },
+                        {
+                          "$ref": "#/definitions/extendedJSRegisterRoutine"
+                        }
+                      ]
+                    }
                   }
                 }
               }
@@ -230,9 +256,9 @@
             "type": "string",
             "title": "Version",
             "default": "The current version of the PPD.",
-            "examples": [
-              "1.0"
-            ]
+            "const": {
+              "$ref": "#/version"
+            }
           },
           "properties": {
             "type": "object",
@@ -442,7 +468,7 @@
         "type": {
           "type": "string",
           "title": "Routine login type",
-          "description": "The of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
+          "description": "The type of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
           "const": "HTTPLoginRoutine"
         },
         "instructions": {
@@ -478,7 +504,7 @@
         "type": {
           "type": "string",
           "title": "Routine login type",
-          "description": "The of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
+          "description": "The type of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
           "const": "htmlLoginRoutine"
         },
         "instructions": {
@@ -515,7 +541,7 @@
         "type": {
           "type": "string",
           "title": "Routine login type",
-          "description": "The of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
+          "description": "The type of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
           "const": "javascriptLoginRoutine"
         },
         "instructions": {
@@ -552,7 +578,7 @@
         "type": {
           "type": "string",
           "title": "Routine login type",
-          "description": "The of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
+          "description": "The type of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
           "const": "extendedJSLoginRoutine"
         },
         "instructions": {
@@ -592,7 +618,7 @@
         "type": {
           "type": "string",
           "title": "Routine login type",
-          "description": "The of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
+          "description": "The type of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
           "const": "HTTPPasswordChangeRoutine"
         },
         "instructions": {
@@ -629,7 +655,7 @@
         "type": {
           "type": "string",
           "title": "Routine login type",
-          "description": "The of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
+          "description": "The type of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
           "const": "htmlPasswordChangeRoutine"
         },
         "instructions": {
@@ -665,7 +691,7 @@
         "type": {
           "type": "string",
           "title": "Routine login type",
-          "description": "The of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
+          "description": "The type of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
           "const": "javascriptPasswordChangeRoutine"
         },
         "instructions": {
@@ -704,7 +730,7 @@
         "type": {
           "type": "string",
           "title": "Routine password change type",
-          "description": "The of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
+          "description": "The type of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
           "const": "extendedJSPasswordChangeRoutine"
         },
         "instructions": {
@@ -714,6 +740,156 @@
           "items": {
             "type": "object",
             "title": "Instruction",
+            "oneOf": [{
+                "$ref": "#/definitions/getInstruction"
+              },
+              {
+                "$ref": "#/definitions/formInstruction"
+              },
+              {
+                "$ref": "#/definitions/javascriptInstruction"
+              },
+              {
+                "$ref": "#/definitions/skipInstruction"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "HTTPRegisterRoutine": {
+      "title": "HTTPRegisterRoutine",
+      "description": "A registration routine that can be executed by sending a HTTP-request.",
+      "type": "object",
+      "required": [
+        "type",
+        "instructions"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Routine register type",
+          "description": "The type of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
+          "const": "HTTPRegisterRoutine"
+        },
+        "instructions": {
+          "type": "array",
+          "title": "Instructions",
+          "description": "The set of instructions.",
+          "items": {
+            "type": "object",
+            "title": "Instruction",
+            "oneOf": [{
+                "$ref": "#/definitions/getInstruction"
+              },
+              {
+                "$ref": "#/definitions/formInstruction"
+              },
+              {
+                "$ref": "#/definitions/skipInstruction"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "htmlRegisterRoutine": {
+      "title": "HTMLRegisterRoutine",
+      "description": "A registration routine that does not rely on javascript.",
+      "type": "object",
+      "required": [
+        "type",
+        "instructions"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Routine register type",
+          "description": "The type of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
+          "const": "htmlRegisterRoutine"
+        },
+        "instructions": {
+          "type": "array",
+          "title": "Instructions",
+          "description": "The set of instructions.",
+          "items": {
+            "type": "object",
+            "title": "Instruction",
+            "description": "An operation on the webpage that is part of the routine process. For example, load a page or fill and submit a form.",
+            "oneOf": [{
+                "$ref": "#/definitions/getInstruction"
+              },
+              {
+                "$ref": "#/definitions/formInstruction"
+              },
+              {
+                "$ref": "#/definitions/skipInstruction"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "javascriptRegisterRoutine": {
+      "title": "JavascriptRegisterRoutine",
+      "description": "A registration routine that relies on javascript being enabled.",
+      "type": "object",
+      "required": [
+        "type",
+        "instructions"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Routine register type",
+          "description": "The type of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
+          "const": "javascriptRegisterRoutine"
+        },
+        "instructions": {
+          "type": "array",
+          "title": "Instructions",
+          "description": "The set of instructions.",
+          "items": {
+            "type": "object",
+            "title": "Instruction",
+            "description": "An operation on the webpage that is part of the routine process. For example, load a page or fill and submit a form.",
+            "oneOf": [{
+                "$ref": "#/definitions/getInstruction"
+              },
+              {
+                "$ref": "#/definitions/formInstruction"
+              },
+              {
+                "$ref": "#/definitions/skipInstruction"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "extendedJSRegisterRoutine": {
+      "title": "ExtendedJSRegisterRoutine",
+      "description": "A registration routine that relies on javascript-instructions.",
+      "type": "object",
+      "required": [
+        "type",
+        "instructions"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Routine registration type",
+          "description": "The type of the routine. Different routine types may contain different type of instructions and instructions may be interpreted differently.",
+          "const": "extendedJSRegisterRoutine"
+        },
+        "instructions": {
+          "type": "array",
+          "title": "Instructions",
+          "description": "The set of instructions.",
+          "items": {
+            "type": "object",
+            "title": "Instruction",
+            "description": "An operation on the webpage that is part of the routine process. For example, load a page or execute some JavaScript.",
             "oneOf": [{
                 "$ref": "#/definitions/getInstruction"
               },

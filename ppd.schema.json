@@ -1035,6 +1035,11 @@
                 }
               }
             },
+            "click": {
+              "type": "string",
+              "title": "Click",
+              "description": "The selector of the element click() should be called upon. This should be preferred over script. Will only be executed if this instruction is part of an extendedJSRoutine."
+            },
             "script": {
               "type": "string",
               "title": "Script",
